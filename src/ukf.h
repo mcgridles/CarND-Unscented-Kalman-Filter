@@ -65,7 +65,10 @@ public:
   int n_aug_;
 
   ///* Radar measurement dimension
-  int n_z_;
+  int n_z_rad_;
+
+  ///* Laser measurement dimension
+  int n_z_las_;
 
   ///* Sigma point spreading parameter
   double lambda_;
@@ -99,6 +102,7 @@ public:
   void SigmaPointPrediction(MatrixXd& Xsig_aug, double delta_t);
   void PredictMeanAndCovariance();
   void PredictRadarMeasurement(VectorXd& z_out, MatrixXd& S_out, MatrixXd& T_out);
+  void PredictLidarMeasurement(VectorXd& z_out, MatrixXd& S_out, MatrixXd& T_out);
 
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
@@ -111,7 +115,7 @@ public:
    * Updates the state and the state covariance matrix using a laser measurement
    * @param meas_package The measurement at k+1
    */
-  void UpdateLidar(MeasurementPackage meas_package);
+  void UpdateLidar(MeasurementPackage meas_package, VectorXd& z_pred, MatrixXd& S, MatrixXd& Tc);
 
   /**
    * Updates the state and the state covariance matrix using a radar measurement
