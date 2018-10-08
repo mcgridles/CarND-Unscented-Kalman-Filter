@@ -64,9 +64,20 @@ public:
   ///* Augmented state dimension
   int n_aug_;
 
+  ///* Radar measurement dimension
+  int n_z_;
+
   ///* Sigma point spreading parameter
   double lambda_;
 
+  ///* Holds previous timestamp for calculating dt
+  long previous_timestamp_;
+
+  ///* Laser NIS
+  double NIS_laser_;
+
+  ///* Radar NIS
+  double NIS_radar_;
 
   /**
    * Constructor
@@ -83,6 +94,11 @@ public:
    * @param meas_package The latest measurement data of either radar or laser
    */
   void ProcessMeasurement(MeasurementPackage meas_package);
+
+  void AugmentedSigmaPoints(MatrixXd& Xsig_out);
+  void SigmaPointPrediction(MatrixXd& Xsig_aug, double delta_t);
+  void PredictMeanAndCovariance();
+  void PredictRadarMeasurement(VectorXd& z_out, MatrixXd& S_out, MatrixXd& T_out);
 
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
@@ -101,7 +117,9 @@ public:
    * Updates the state and the state covariance matrix using a radar measurement
    * @param meas_package The measurement at k+1
    */
-  void UpdateRadar(MeasurementPackage meas_package);
+  void UpdateRadar(MeasurementPackage meas_package, VectorXd& z_pred, MatrixXd& S, MatrixXd& Tc);
+
+
 };
 
 #endif /* UKF_H */
